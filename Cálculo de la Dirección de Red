@@ -156,3 +156,43 @@ La dirección de red es la combinación de los resultados de los cuatro octetos:
 La operación **AND** entre la dirección IP y la máscara de subred te permite obtener la dirección de red, ya que "bloquea" los bits de la IP que corresponden a la parte de la **red** (según lo define la máscara de subred) y establece esos bits a cero en la dirección de red resultante.
 
 ¡Espero que esto aclare el proceso de la operación **AND**!
+
+Calculando la direccion de RED entendiendo la Mascara - Osea no numeros Binarios
+
+¡Claro! Para calcular la dirección de red sin usar números binarios, solo necesitas entender cómo funciona la máscara de subred y cómo se aplica a la dirección IP.
+
+### Datos proporcionados:
+- Dirección IP: **172.16.4.100**
+- Máscara de subred: **255.255.0.0**
+
+### Pasos para calcular la dirección de red:
+
+#### 1. Entender la máscara de subred
+La máscara de subred **255.255.0.0** indica que los primeros dos octetos (los primeros 16 bits) corresponden a la **parte de la red**, y los últimos dos octetos (los últimos 16 bits) corresponden a la **parte del host**.  
+Esto significa que en la dirección IP, los primeros dos octetos se mantienen tal cual, pero los últimos dos octetos se establecen a **cero** para obtener la dirección de red.
+
+#### 2. Aplicar la máscara de subred
+Lo que debes hacer es **mantener los primeros dos octetos** de la dirección IP tal como están, y **poner los dos últimos octetos en 0**.
+
+- Dirección IP: **172.16.4.100**
+- Máscara de subred: **255.255.0.0**
+
+##### Desglosado:
+- El primer octeto de la IP es **172**. La máscara de subred es **255**, lo que significa que el primer octeto de la dirección de red es **172**.
+- El segundo octeto de la IP es **16**. La máscara de subred es **255**, por lo que el segundo octeto de la dirección de red será **16**.
+- El tercer octeto de la IP es **4**, pero la máscara de subred es **0**, por lo que este octeto en la dirección de red será **0**.
+- El cuarto octeto de la IP es **100**, y al igual que el tercer octeto, la máscara de subred es **0**, así que este octeto en la dirección de red también será **0**.
+
+#### 3. Resultado
+
+La dirección de red será:
+
+**172.16.0.0**
+
+### Resumen:
+
+Para calcular la dirección de red **sin binarios**, simplemente sigues la máscara de subred:
+- **255** en la máscara de subred significa que el octeto de la dirección IP se mantiene igual.
+- **0** en la máscara de subred significa que ese octeto de la dirección IP se convierte en **0** en la dirección de red.
+
+Por lo tanto, la **dirección de red** para **172.16.4.100** con la máscara de subred **255.255.0.0** es **172.16.0.0**.

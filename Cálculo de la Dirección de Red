@@ -53,3 +53,106 @@ El resultado de la operación AND es la **dirección de red**:
 ### Conclusión:
 La opción **4 (10.5.4.0)** es la correcta porque es el resultado de aplicar la máscara de subred **255.255.255.0** a la dirección IP **10.5.4.100**, lo que nos da la dirección de red **10.5.4.0**.
 
+Ejercicio Realizado paso a paso y explicado.
+
+¡Exactamente! La operación **AND** se realiza bit a bit entre la dirección IP y la máscara de subred. En esta operación, se comparan los bits de la dirección IP con los bits correspondientes de la máscara de subred, y se obtiene un **1** solo si ambos bits son 1. En cualquier otro caso (es decir, si uno o ambos bits son 0), el resultado es 0.
+
+### Cómo funciona la operación **AND** bit a bit:
+
+La regla es simple:
+- **1 AND 1 = 1**
+- **1 AND 0 = 0**
+- **0 AND 1 = 0**
+- **0 AND 0 = 0**
+
+### Ejemplo paso a paso:
+
+Vamos a ver cómo se aplica esta operación con el ejemplo que proporcionaste:
+
+- Dirección IP del Host-A: **10.5.4.100**  
+  En binario: `00001010.00000101.00000100.01100100`
+
+- Máscara de subred: **255.255.255.0**  
+  En binario: `11111111.11111111.11111111.00000000`
+
+Ahora, aplicamos la operación **AND** bit a bit entre los bits de la dirección IP y la máscara de subred. Veamos cómo se hace en cada octeto.
+
+#### Primer octeto:
+- IP: `00001010`  
+- Máscara: `11111111`
+
+Operamos bit a bit:
+```
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+1 AND 1 = 1
+0 AND 1 = 0
+1 AND 1 = 1
+0 AND 1 = 0
+```
+El resultado es: `00001010`, que es **10** en decimal.
+
+#### Segundo octeto:
+- IP: `00000101`  
+- Máscara: `11111111`
+
+Operamos bit a bit:
+```
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+1 AND 1 = 1
+0 AND 1 = 0
+1 AND 1 = 1
+```
+El resultado es: `00000101`, que es **5** en decimal.
+
+#### Tercer octeto:
+- IP: `00000100`  
+- Máscara: `11111111`
+
+Operamos bit a bit:
+```
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+0 AND 1 = 0
+1 AND 1 = 1
+0 AND 1 = 0
+0 AND 1 = 0
+```
+El resultado es: `00000100`, que es **4** en decimal.
+
+#### Cuarto octeto:
+- IP: `01100100`  
+- Máscara: `00000000`
+
+Operamos bit a bit:
+```
+0 AND 0 = 0
+1 AND 0 = 0
+1 AND 0 = 0
+0 AND 0 = 0
+0 AND 0 = 0
+1 AND 0 = 0
+0 AND 0 = 0
+0 AND 0 = 0
+```
+El resultado es: `00000000`, que es **0** en decimal.
+
+### Resultado final:
+
+La dirección de red es la combinación de los resultados de los cuatro octetos:
+
+- Dirección de red: **10.5.4.0**
+
+### Resumen:
+
+La operación **AND** entre la dirección IP y la máscara de subred te permite obtener la dirección de red, ya que "bloquea" los bits de la IP que corresponden a la parte de la **red** (según lo define la máscara de subred) y establece esos bits a cero en la dirección de red resultante.
+
+¡Espero que esto aclare el proceso de la operación **AND**!

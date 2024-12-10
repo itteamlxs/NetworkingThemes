@@ -1,0 +1,55 @@
+# Ejercicio: Cálculo de la Dirección de Red
+
+## Problema:
+
+El Host-A tiene la dirección IPv4 y la máscara de subred 10.5.4.100 255.255.255.0. ¿Cuál es la dirección de red del Host-A?
+
+## Opciones:
+- 10.0.0.0
+- 10.5.4.100
+- 10.5.0.0
+- 10.5.4.0 (Opción Correcta)
+
+## Resolución:
+
+### Datos proporcionados:
+- Dirección IP del Host-A: **10.5.4.100**
+- Máscara de subred: **255.255.255.0**
+
+### Cálculo de la dirección de red:
+
+La **dirección de red** se obtiene realizando una operación lógica **AND** entre la dirección IP y la máscara de subred.
+
+#### Paso 1: Convertir a formato binario
+
+- **Dirección IP**:  
+  10.5.4.100 → `00001010.00000101.00000100.01100100`
+
+- **Máscara de subred** (255.255.255.0):  
+  255.255.255.0 → `11111111.11111111.11111111.00000000`
+
+#### Paso 2: Aplicar la operación AND
+
+Realizamos una operación **AND** bit a bit entre la dirección IP y la máscara de subred.
+
+- Primer octeto: `00001010` AND `11111111` = `00001010` (10 en decimal)
+- Segundo octeto: `00000101` AND `11111111` = `00000101` (5 en decimal)
+- Tercer octeto: `00000100` AND `11111111` = `00000100` (4 en decimal)
+- Cuarto octeto: `01100100` AND `00000000` = `00000000` (0 en decimal)
+
+#### Paso 3: Resultado
+
+El resultado de la operación AND es la **dirección de red**:
+
+- Dirección de red: **10.5.4.0**
+
+### Explicación de las opciones:
+
+- **Opción 1: 10.0.0.0** → Incorrecto. Esto no coincide con la máscara de subred proporcionada.
+- **Opción 2: 10.5.4.100** → Incorrecto. Esta es la dirección IP del Host-A, no la dirección de red.
+- **Opción 3: 10.5.0.0** → Incorrecto. No es el resultado de aplicar la máscara 255.255.255.0 a la dirección IP.
+- **Opción 4: 10.5.4.0** → **Correcto**. Es el resultado de aplicar la máscara de subred a la dirección IP, lo que da como resultado la dirección de red.
+
+### Conclusión:
+La opción **4 (10.5.4.0)** es la correcta porque es el resultado de aplicar la máscara de subred **255.255.255.0** a la dirección IP **10.5.4.100**, lo que nos da la dirección de red **10.5.4.0**.
+

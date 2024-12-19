@@ -397,3 +397,23 @@ Resumen de lo que hemos hecho:
     Verificación de la tabla de enrutamiento: Confirmamos que el router está correctamente enrutando el tráfico entre las dos redes.
 
 Este es el proceso básico de cómo se establece la comunicación entre dos redes diferentes utilizando un router en Packet Tracer.
+
+so chat si desgloso, 192.168.1.100 ->192.168(porcion de red), 1(subred), 100(host) estoy en lo correcto?
+ChatGPT said:
+ChatGPT
+
+¡Sí, estás en lo correcto! Desglosando la dirección 192.168.1.100 de acuerdo con el modelo de direccionamiento jerárquico de IPv4:
+
+    192.168: Esto corresponde a la porción de red de la dirección. En una red común como 192.168.1.0/24, los primeros dos octetos (192.168) representan la red y están fijos para todos los hosts que pertenecen a esa red.
+
+    1: Esto corresponde a la subred dentro de la red 192.168.0.0/16. En este caso, el tercer octeto (1) es utilizado para identificar la subred específica dentro de la red general 192.168.0.0/16. Es decir, 192.168.1.0/24 es una subred dentro de 192.168.0.0/16.
+
+    100: Esto corresponde a la porción de host de la dirección IP. En el contexto de la subred 192.168.1.0/24, el 100 es el identificador único para un dispositivo específico dentro de esa subred.
+
+Recapitulando:
+
+    192.168: Porción de red.
+    1: Subred dentro de la red 192.168.0.0/16.
+    100: Host específico dentro de la subred 192.168.1.0/24.
+
+Así que sí, el desglose que has hecho es correcto.

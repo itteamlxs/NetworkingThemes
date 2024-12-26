@@ -1,0 +1,118 @@
+# Máscara de Subred y Notación CIDR
+
+## ¿Qué es una máscara de subred?
+
+Una **máscara de subred** es un conjunto de bits utilizado en redes IP para dividir una dirección IP en dos partes principales:
+
+1. **La parte de red**: Identifica la red específica a la que pertenece un dispositivo.
+2. **La parte de host**: Identifica un dispositivo único dentro de esa red.
+
+La máscara de subred permite separar estas partes al aplicar una operación lógica, comúnmente **AND**, entre la dirección IP y la máscara.
+
+---
+
+## Ejemplo básico de máscara de subred
+
+- Dirección IP: `192.168.1.10`
+- Máscara de subred: `255.255.255.0`
+
+### Conversión a binario:
+- Dirección IP: `11000000.10101000.00000001.00001010`
+- Máscara: `11111111.11111111.11111111.00000000`
+
+Al realizar la operación **AND**, se obtiene:
+
+```
+11000000.10101000.00000001.00001010  (IP)
+11111111.11111111.11111111.00000000  (Máscara)
+-----------------------------------
+11000000.10101000.00000001.00000000  (Resultado: Parte de red)
+```
+
+El resultado es la dirección de red: `192.168.1.0`. Esto indica que el dispositivo pertenece a la red `192.168.1.0`.
+
+---
+
+## Máscara de subred en notación CIDR
+
+### ¿Qué es CIDR?
+
+La notación **CIDR** (Classless Inter-Domain Routing) es una forma compacta de representar máscaras de subred mediante el número de bits en `1`.
+
+Por ejemplo:
+- `255.255.255.0` → `/24` (24 bits en `1`).
+- `255.255.255.128` → `/25` (25 bits en `1`).
+
+---
+
+### Ejemplo de conversión: `255.255.255.128 → /25`
+
+#### Paso a paso:
+
+1. **Máscara en binario**:
+   - `255` → `11111111` (8 bits en `1`).
+   - `255` → `11111111` (8 bits en `1`).
+   - `255` → `11111111` (8 bits en `1`).
+   - `128` → `10000000` (1 bit en `1`, 7 bits en `0`).
+
+2. **Cuenta los bits en `1`**:
+   - Primer octeto: 8 bits.
+   - Segundo octeto: 8 bits.
+   - Tercer octeto: 8 bits.
+   - Cuarto octeto: 1 bit.
+
+   **Total**: 8 + 8 + 8 + 1 = **25 bits en `1`**.
+
+3. **Resultado**:
+   - La máscara `255.255.255.128` equivale a `/25` en notación CIDR.
+
+---
+
+## Rango de direcciones para `/25`
+
+En una red con máscara `/25`:
+
+- **Parte de red**: Los primeros 25 bits.
+- **Parte de host**: Los últimos 7 bits.
+
+Esto significa:
+
+- **Rango de direcciones IP**: \( 2^7 = 128 \) direcciones totales.
+- **Hosts utilizables**: \( 2^7 - 2 = 126 \) (se restan 2 para la dirección de red y la dirección de broadcast).
+
+### Ejemplo práctico
+
+Para la red `192.168.1.0/25`:
+- Dirección de red: `192.168.1.0`
+- Dirección de broadcast: `192.168.1.127`
+- Rango de hosts utilizables: `192.168.1.1` a `192.168.1.126`.
+
+---
+
+## Clases de redes y máscaras predeterminadas
+
+| Clase | Rango de IP                  | Máscara predeterminada | Hosts utilizables |
+|-------|------------------------------|-------------------------|--------------------|
+| A     | 0.0.0.0 - 127.255.255.255    | 255.0.0.0 (/8)         | ~16.7 millones    |
+| B     | 128.0.0.0 - 191.255.255.255  | 255.255.0.0 (/16)      | ~65,000           |
+| C     | 192.0.0.0 - 223.255.255.255  | 255.255.255.0 (/24)    | 254               |
+
+---
+
+## Beneficios de las máscaras de subred
+
+1. **Organización de la red**:
+   - Divide redes grandes en subredes más pequeñas y manejables.
+
+2. **Seguridad**:
+   - Limita el acceso a segmentos específicos de la red.
+
+3. **Reducción del tráfico**:
+   - Minimiza la cantidad de tráfico de broadcast al dividir dominios.
+
+4. **Uso eficiente de direcciones IP**:
+   - Evita desperdiciar direcciones al asignar solo las necesarias.
+
+---
+
+¡Espero que esta guía te sea útil! Si necesitas más ejemplos o explicaciones, no dudes en preguntar. 😄

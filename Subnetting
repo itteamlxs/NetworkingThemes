@@ -116,3 +116,34 @@ Para la red `192.168.1.0/25`:
 ---
 
 ¡Espero que esta guía te sea útil! Si necesitas más ejemplos o explicaciones, no dudes en preguntar. 😄
+
+
+¿Son los sufijos "estándar"?
+Algunos sufijos son muy comunes porque se adaptan a las necesidades prácticas de las redes. Por ejemplo:
+
+/24: Es probablemente el más usado, ya que permite 254 hosts utilizables. Es ideal para redes locales (LAN).
+/16: Se utiliza en redes más grandes, como las empresariales, permitiendo ~65,000 hosts.
+/8: Muy grande, típico en redes de grandes empresas o proveedores de Internet (ISPs).
+Sin embargo, gracias a CIDR (Classless Inter-Domain Routing), cualquier sufijo entre /1 y /32 es válido, dependiendo de cuántos dispositivos o subredes necesites.
+
+Tabla de sufijos comunes y su significado
+Sufijo CIDR	Máscara de subred	Hosts utilizables	Ejemplo de uso
+/8	255.0.0.0	~16.7 millones	Grandes redes, ISPs
+/16	255.255.0.0	~65,000	Redes medianas y grandes
+/24	255.255.255.0	254	LAN comunes
+/25	255.255.255.128	126	Subredes pequeñas
+/30	255.255.255.252	2	Enlaces punto a punto
+/32	255.255.255.255	1	Una sola IP (usada para routers o firewalls).
+¿Por qué ves mucho /24?
+Tamaño ideal para redes LAN: Permite hasta 254 dispositivos, que suelen ser suficientes para redes de hogares, oficinas o pequeñas empresas.
+Eficiencia en direcciones IP: No desperdicia tantas IPs como /16 pero sigue siendo lo suficientemente grande.
+Compatibilidad y simplicidad: Muchas configuraciones predeterminadas en routers y sistemas operativos asumen una máscara de red /24.
+¿Cómo elegir el sufijo adecuado?
+Depende de los requisitos de la red:
+
+Número de dispositivos necesarios:
+Si tienes 50 dispositivos, un /26 (62 hosts utilizables) es suficiente.
+Si tienes más de 200 dispositivos, un /24 es ideal.
+Subredes: Si necesitas dividir una red en segmentos más pequeños, puedes usar sufijos más altos (/25, /26, etc.).
+Optimización de direcciones: CIDR permite ajustar las máscaras para no desperdiciar direcciones.
+

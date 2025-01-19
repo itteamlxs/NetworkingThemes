@@ -1,0 +1,106 @@
+# Diferencias entre Difusión Limitada y Difusión Dirigida en Redes
+
+Este documento explica las diferencias entre **Difusión Limitada** y **Difusión Dirigida**, los conceptos asociados a estas, y cómo se comportan en escenarios con múltiples VLANs y enrutamiento. También se incluyen dudas y comentarios para una mejor comprensión.
+
+## Definiciones Básicas
+
+### 1. Difusión Limitada (Limited Broadcast)
+
+La **difusión limitada** se utiliza para enviar un paquete a todos los dispositivos dentro de la misma red local, y se dirige a la dirección especial **255.255.255.255**.
+
+- **Alcance**: La difusión limitada **solo afecta a la red local**. Los **routers no reenvían** este tipo de paquetes a otras redes.
+- **Casos comunes de uso**:
+  - **ARP (Address Resolution Protocol)**: Para resolver una dirección MAC de un dispositivo a partir de una dirección IP.
+  - **DHCP (Dynamic Host Configuration Protocol)**: Para obtener una dirección IP cuando un dispositivo está configurando su red inicial.
+  
+- **Ejemplo**:
+  Si un dispositivo con dirección IP **192.168.1.10** envía un paquete de difusión limitada (con destino a **255.255.255.255**), el paquete será recibido por todos los dispositivos de la red **192.168.1.0/24** (si están configurados para escuchar en esa dirección), pero **no será reenviado a otras redes**.
+
+### 2. Difusión Dirigida (Directed Broadcast)
+
+La **difusión dirigida** se envía a una **dirección de difusión específica** para una red, por ejemplo, **192.168.1.255** para la red **192.168.1.0/24**. Esta dirección se utiliza para enviar un paquete a todos los dispositivos dentro de esa red, pero **no cruza los límites de la red**.
+
+- **Alcance**: La difusión dirigida está restringida a una red específica, y **los routers pueden reenviarla** entre redes si se configura correctamente.
+- **Casos comunes de uso**:
+  - Usada cuando se desea enviar un mensaje a **todos los dispositivos en una red específica**. Esto puede ocurrir entre redes si el router está configurado para reenviar la difusión dirigida.
+
+- **Ejemplo**:
+  Si un dispositivo en **192.168.1.0/24** envía un paquete a **192.168.1.255**, **todos los dispositivos en 192.168.1.0/24** recibirán ese paquete. Si existe un router que conecta diferentes redes, **ese paquete no será reenviado a otras redes** a menos que el router esté configurado para hacerlo.
+
+---
+
+## **Dudas y Aclaraciones durante la Conversación**
+
+### **Pregunta 1**:
+> *¿Entonces, en una difusión dirigida, el paquete IPv4 va a las PCs, impresoras, APs e IoT que estén en ese segmento de red, y una limitada solo a las PCs?*
+
+#### **Aclaración**:
+No, no es correcto. Tanto en una difusión limitada como en una difusión dirigida, **todos los dispositivos** en la misma red local (que estén configurados para escuchar en esa dirección de difusión) recibirán el paquete. Esto incluye **PCs, impresoras, puntos de acceso (APs), dispositivos IoT**, etc. No se limita solo a las PCs.
+
+### **Pregunta 2**:
+> *Entonces, si tengo un segmento de red 192.168.1.0, ¿quiere decir que este paquete con la difusión limitada no llegaría a la 192.168.2.0?*
+
+#### **Aclaración**:
+Correcto. Si tienes dos redes, **192.168.1.0/24** y **192.168.2.0/24**, un paquete de **difusión limitada** (255.255.255.255) **solo se entregará** a los dispositivos dentro de la misma red local (**192.168.1.0/24** en este caso). La difusión limitada **no cruza los límites de la red local**, por lo que **no será enviado a la red 192.168.2.0/24**.
+
+### **Pregunta 3**:
+> *¿Es debido a que si queremos que estas dos VLANs se conecten necesitamos un enrutamiento? 192.168.1.0, 192.168.2.0?*
+
+#### **Aclaración**:
+Exactamente. Para que dos VLANs, como **192.168.1.0/24** y **192.168.2.0/24**, puedan comunicarse entre sí, **se necesita un enrutador** o un **switch capa 3** que realice el **enrutamiento entre VLANs**. Sin enrutamiento, los dispositivos de una VLAN no podrán comunicarse con los de la otra.
+
+---
+
+## Diferencias Clave
+
+| Característica               | **Difusión Limitada (255.255.255.255)** | **Difusión Dirigida (Ej. 192.168.1.255)** |
+|------------------------------|----------------------------------------|-------------------------------------------|
+| **Dirección de destino**      | 255.255.255.255                        | Dirección de difusión de la red específica (Ej. 192.168.1.255) |
+| **Alcance**                   | Solo dentro de la misma red local      | Solo dentro de una red específica (pero los routers pueden reenviar) |
+| **Reenvío por routers**       | No reenvía el paquete a otras redes    | Los routers pueden reenviar el paquete a otras redes |
+| **Casos típicos de uso**      | ARP, DHCP, configuración inicial de red | Difusión a todos los dispositivos en una red específica |
+
+---
+
+## Difusión Dirigida con Enrutamiento entre VLANs
+
+### **Escenario:**
+Supongamos que tienes dos VLANs conectadas por un router para permitir el **enrutamiento entre VLANs**:
+- **VLAN 1**: **192.168.1.0/24**
+- **VLAN 2**: **192.168.2.0/24**
+
+Y un **router** conecta ambas VLANs.
+
+### **Difusión Dirigida con Enrutamiento**:
+1. **VLAN 1 (192.168.1.0/24)**: Si un dispositivo en esta red envía un paquete a la dirección de difusión dirigida **192.168.1.255**:
+   - **Todos los dispositivos en 192.168.1.0/24** recibirán el paquete.
+   - El paquete **no se enviará** a **VLAN 2 (192.168.2.0/24)** porque la difusión dirigida **no cruza los límites de la red local** a menos que se configure un enrutador para reenviar esa difusión.
+
+2. **VLAN 2 (192.168.2.0/24)**: Si un dispositivo en **192.168.2.0/24** envía un paquete de difusión dirigida, este será enviado a **192.168.2.255**:
+   - **Todos los dispositivos en 192.168.2.0/24** recibirán el paquete.
+   - El paquete **no será enviado** a **VLAN 1 (192.168.1.0/24)**.
+
+### **Reenvío entre VLANs con Enrutamiento**:
+El **enrutador** permite que los dispositivos en **VLAN 1** se comuniquen con los de **VLAN 2**, pero **no permite que los paquetes de difusión dirigida se crucen entre VLANs**.
+
+- Si un dispositivo en **VLAN 1** envía un paquete a **192.168.1.255**, este paquete **no será reenviado** a la **red 192.168.2.0/24**.
+- Para la comunicación entre dispositivos en **VLAN 1** y **VLAN 2**, se deben utilizar paquetes **unicast** o **multicast**.
+
+### **¿Por qué no se reenvía la difusión dirigida entre VLANs?**
+Los **routers no reenvían** los paquetes de difusión dirigida debido a que este tipo de difusión está diseñado para **quedar dentro de un solo dominio de difusión**. Las **VLANs** funcionan como **dominios de difusión separados**, lo que significa que, a menos que se configuren protocolos especiales (como **DHCP relay**), la difusión dirigida **no cruzará entre VLANs**.
+
+---
+
+## Resumen de Reenvío de Difusión Dirigida entre VLANs:
+
+1. **Difusión Dirigida** (Ejemplo: **192.168.1.255** para la red **192.168.1.0/24**):
+   - El paquete se enviará a **todos los dispositivos dentro de la red local** de **192.168.1.0/24**.
+   - **No cruza los límites de la red** a menos que un **router** lo reenvíe, lo cual **generalmente no ocurre**.
+   - **El paquete no será entregado** a dispositivos en otras redes o VLANs.
+
+2. **Para la comunicación entre redes (VLANs), se necesita enrutamiento** y no se utiliza difusión dirigida. Los dispositivos en diferentes VLANs se comunican mediante **unicast** o **multicast**.
+
+---
+
+> **Nota**: Si necesitas que dispositivos en diferentes VLANs se comuniquen, asegúrate de que se utilice un **enrutador** o un **switch capa 3** para realizar el **enrutamiento entre VLANs**.
+

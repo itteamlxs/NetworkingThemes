@@ -1,0 +1,65 @@
+# Direccionamiento IPv4: Clases y Rango de Direcciones Privadas y Públicas
+
+Este documento proporciona una explicación sobre el direccionamiento IPv4 según el RFC 790 y las direcciones privadas de IPv4, definidas en el RFC 1918. También aclara cómo distinguir las direcciones privadas de las públicas dentro de las clases A, B y C.
+
+## Direccionamiento IPv4 en Clases
+
+Las direcciones IPv4 históricamente se asignaban utilizando un sistema de clases, según lo definido en el RFC 790. Las clases de direcciones IPv4 eran:
+
+### Clase A
+- **Rango**: 0.0.0.0/8 a 127.0.0.0/8
+- **Descripción**: Diseñada para redes extremadamente grandes, con más de 16 millones de direcciones de host.
+- **Rango de direcciones de host**: 16,777,216 direcciones por red.
+  
+### Clase B
+- **Rango**: 128.0.0.0/16 a 191.255.0.0/16
+- **Descripción**: Diseñada para redes de tamaño moderado a grande, con hasta 65,000 direcciones de host.
+- **Rango de direcciones de host**: 65,536 direcciones por red.
+
+### Clase C
+- **Rango**: 192.0.0.0/24 a 223.255.255.0/24
+- **Descripción**: Diseñada para redes pequeñas, con un máximo de 254 hosts.
+- **Rango de direcciones de host**: 254 direcciones por red.
+
+## Direcciones IPv4 Privadas
+
+El RFC 1918 define un conjunto de direcciones IPv4 reservadas para uso privado, lo que significa que estas direcciones no son accesibles directamente desde Internet. Los rangos privados son los siguientes:
+
+### Clase A privada
+- **Rango**: 10.0.0.0/8
+
+### Clase B privada
+- **Rango**: 172.16.0.0/12
+
+### Clase C privada
+- **Rango**: 192.168.0.0/16
+
+## Diferenciando Direcciones Privadas y Públicas en la Clase C
+
+Dentro de la **Clase C** (rango 192.0.0.0 a 223.255.255.0), el único subrango privado es:
+
+- **Privado**: 192.168.0.0 a 192.168.255.255
+
+Cualquier dirección fuera de este rango, dentro del bloque 192.0.0.0 a 192.167.255.255, es **pública**. 
+
+### Ejemplo:
+
+- **Dirección privada de Clase C**: 192.168.0.0 a 192.168.255.255.
+- **Dirección pública de Clase C**: 192.0.0.0 a 192.167.255.255 y 192.169.0.0 en adelante.
+
+Por lo tanto, una dirección como **192.167.0.0** sería **pública**, no privada.
+
+## Resumen
+
+- **Rangos privados según RFC 1918**:
+  - **Clase A**: 10.0.0.0/8
+  - **Clase B**: 172.16.0.0/12
+  - **Clase C**: 192.168.0.0/16
+- **Rangos públicos**: Cualquier dirección que no pertenezca a los rangos anteriores.
+  
+Este sistema de direccionamiento sigue siendo importante para la comprensión del uso de direcciones IP en redes locales y públicas.
+
+## Enlaces útiles
+
+- [RFC 790 - Dirección IP de Clase](https://tools.ietf.org/html/rfc790)
+- [RFC 1918 - Direcciones Privadas](https://tools.ietf.org/html/rfc1918)

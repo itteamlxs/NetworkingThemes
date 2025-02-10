@@ -1,0 +1,70 @@
+# Configuración de Segmento de Servidores
+
+## Máscaras de Subred y Segmentación
+
+### Máscaras de Subred Comunes
+
+Las máscaras de subred estándar y su descripción:
+
+- **255.255.255.0 (/24)**: 
+  - Ofrece **254 direcciones utilizables**.
+  - Ideal para redes de tamaño mediano.
+  
+- **255.255.255.128 (/25)**:
+  - Ofrece **126 direcciones utilizables**.
+  - Ideal para redes de tamaño mediano, cuando se requiere un mayor control de subredes.
+
+- **255.255.255.192 (/26)**:
+  - Ofrece **62 direcciones utilizables**.
+  - Buena opción si planeas expandir el número de dispositivos en la red.
+
+- **255.255.255.224 (/27)**:
+  - Ofrece **30 direcciones utilizables**.
+  - Ideal para un segmento pequeño de servidores, como en este caso con 10 servidores.
+
+- **255.255.255.240 (/28)**:
+  - Ofrece **14 direcciones utilizables**.
+  - Máscara más pequeña para redes muy limitadas en dispositivos.
+
+### ¿Cuál elegir?
+
+Si solo planeas tener **10 servidores**, la **máscara `/27`** (255.255.255.224) es suficiente y proporciona suficiente espacio de direcciones IP. Sin embargo, si consideras que el segmento de servidores podría crecer en el futuro, una **máscara `/26`** (255.255.255.192) podría ser una mejor opción para no quedarte corto de direcciones.
+
+---
+
+## Configuración de la Red de Servidores
+
+### Segmentación de Red para Servidores
+
+- **Rango de IPs: 192.168.3.0/27** (máscara 255.255.255.224)
+- **Direcciones utilizables**: 192.168.3.1 a 192.168.3.30 (30 direcciones IP disponibles).
+  
+Esta subred está diseñada para conectar tus servidores de forma eficiente y segura, garantizando que solo los dispositivos que necesitan acceder a ellos tengan la oportunidad de hacerlo.
+
+### Recomendaciones para Seguridad
+
+1. **Control de Acceso**:
+   - Usa **ACLs** para limitar qué dispositivos pueden acceder a los servidores en la red 192.168.3.0.
+   - Aplica políticas de firewall estrictas para proteger la comunicación entre servidores y otras redes.
+
+2. **Monitoreo de Tráfico**:
+   - Instala sistemas de monitoreo como **IDS/IPS** para detectar comportamientos sospechosos en la red de servidores.
+
+3. **Cifrado de Comunicación**:
+   - Usa **SSH** para la administración remota de los servidores y habilita **SSL/TLS** en los servicios que lo necesiten.
+
+4. **Seguridad en los Servidores**:
+   - Desactiva servicios innecesarios en los servidores para reducir la superficie de ataque.
+   - Mantén actualizado el sistema operativo y las aplicaciones para reducir vulnerabilidades conocidas.
+
+### Beneficios de la Segmentación para Servidores
+
+- **Segregación de tráfico**: Reduce la congestión y mejora el rendimiento al separar los servidores de otras redes.
+- **Mayor control de acceso**: Facilita la implementación de políticas de seguridad específicas para el segmento de servidores.
+- **Escalabilidad**: Al estar en una subred dedicada, puedes ampliar fácilmente la infraestructura sin interferir con otras partes de la red.
+
+---
+
+## Conclusión
+
+Al usar la **máscara de subred 255.255.255.224 (/27)** para el segmento de servidores, estarás creando una infraestructura eficiente y segura que permitirá escalabilidad en el futuro y un mayor control sobre el acceso a los servidores. Si en el futuro necesitas más direcciones IP, siempre puedes cambiar la configuración de la red o añadir nuevas subredes según lo necesites.

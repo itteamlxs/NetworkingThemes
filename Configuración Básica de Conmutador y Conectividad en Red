@@ -1,0 +1,177 @@
+# 🛠 Configuración Básica de Conmutador y Conectividad en Red
+
+Este documento describe la configuración básica de switches para establecer conectividad entre computadoras en una red. Además, proporciona estrategias para mejorar la seguridad y administración de la red mediante VLANs y control de accesos.
+
+---
+
+## ✨ **1. Topología de Red**
+
+| **Dispositivo** | **Interfaz** | **Conexión** |
+|---------------|------------|-------------|
+| **PC1**      | NIC        | Switch1 Fa0/2 |
+| **PC2**      | NIC        | Switch2 Fa0/2 |
+| **Switch1**  | Fa0/1      | Conectado a Switch2 Fa0/1 |
+| **Switch2**  | Fa0/1      | Conectado a Switch1 Fa0/1 |
+
+📌 **Fa0/1** en ambos switches será configurado como **trunk** para permitir la comunicación entre los switches.
+
+---
+
+## ✨ **2. Asignación de Direcciones IP**
+
+Cada PC tendrá una dirección IP en la misma subred:
+
+| **Dispositivo** | **Dirección IP** | **Máscara de Subred** |
+|---------------|---------------|----------------|
+| **PC1**      | 192.168.1.1    | 255.255.255.0  |
+| **PC2**      | 192.168.1.2    | 255.255.255.0  |
+
+Para configurar la IP en cada PC:
+1. Ve a **Desktop > IP Configuration**.
+2. Ingresa la **IP y la máscara de subred**.
+
+---
+
+## ✨ **3. Configuración de los Switches**
+
+### 🔹 **Switch1**
+```bash
+enable
+configure terminal
+
+interface FastEthernet 0/1
+switchport mode trunk
+no shutdown
+exit
+
+interface FastEthernet 0/2
+switchport mode access
+no shutdown
+exit
+
+end
+write memory
+```
+
+### 🔹 **Switch2**
+```bash
+enable
+configure terminal
+
+interface FastEthernet 0/1
+switchport mode trunk
+no shutdown
+exit
+
+interface FastEthernet 0/2
+switchport mode access
+no shutdown
+exit
+
+end
+write memory
+```
+
+📌 **Explicación:**
+✔️ **Fa0/1** se configura como **trunk** para permitir el tráfico entre switches.
+✔️ **Fa0/2** se configura como **access**, ya que solo transportará tráfico de una PC.
+✔️ **No shutdown** se usa para activar los puertos.
+
+---
+
+## ✨ **4. Verificación de la Configuración**
+
+Ejecuta los siguientes comandos en los switches:
+
+### **🔹 Ver los dispositivos conectados**
+```bash
+show mac address-table
+```
+
+### **🔹 Verificar estado de los puertos**
+```bash
+show interfaces status
+```
+
+### **🔹 Ver la configuración del switch**
+```bash
+show running-config
+```
+
+---
+
+## ✨ **5. Prueba de Conectividad con Ping**
+1. En **PC1**, ejecuta:
+   ```bash
+   ping 192.168.1.2
+   ```
+2. En **PC2**, ejecuta:
+   ```bash
+   ping 192.168.1.1
+   ```
+Si todo está configurado correctamente, recibirás respuestas exitosas.
+
+---
+
+## ✨ **6. Seguridad y Control de Acceso**
+
+### **🔒 Evitar que cualquier PC tenga acceso a la red**
+
+Por defecto, todos los puertos están en **VLAN 1**, lo que permite que cualquier PC conectada a otro puerto pueda comunicarse con PC1 y PC2. Para restringir esto:
+
+### **🔹 1. Apagar puertos no utilizados**
+```bash
+configure terminal
+interface range FastEthernet 0/3 - 0/24
+shutdown
+exit
+```
+📌 **Efecto:** Solo los puertos necesarios estarán activos.
+
+### **🔹 2. Usar VLANs para segmentar la red**
+Ejemplo:
+- **PC1 y PC2 en VLAN 10**
+- **Otros dispositivos en VLAN 20**
+
+```bash
+configure terminal
+vlan 10
+name PCs
+vlan 20
+name Otros
+
+interface FastEthernet 0/2
+switchport mode access
+switchport access vlan 10
+exit
+
+interface FastEthernet 0/3
+switchport mode access
+switchport access vlan 20
+exit
+```
+📌 **Efecto:** Dispositivos en VLAN 20 no podrán comunicarse con PC1 y PC2.
+
+### **🔹 3. Usar Port Security**
+Evita que dispositivos no autorizados se conecten.
+```bash
+configure terminal
+interface FastEthernet 0/2
+switchport port-security
+switchport port-security maximum 1
+switchport port-security violation shutdown
+switchport port-security mac-address sticky
+exit
+```
+📌 **Efecto:** Solo un dispositivo puede conectarse a Fa0/2; si alguien conecta otro, el puerto se bloquea.
+
+---
+
+## ✨ **7. Conclusión**
+
+- ✅ Configuramos **dos switches conectados entre sí** con conectividad entre **PC1 y PC2**.
+- ✅ Verificamos la conectividad con **ping** y comandos de diagnóstico.
+- ✅ Implementamos medidas de **seguridad** para evitar accesos no deseados.
+
+🚀 **¡Ejercicio completado!** Para mayor seguridad, podemos implementar VLANs más avanzadas o configuración de acceso por dirección MAC.
+

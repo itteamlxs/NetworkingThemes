@@ -101,3 +101,75 @@ show interfaces trunk
 ---
 
 Con esto ya tienes un conocimiento sólido de **access vs. trunk**. Si quieres más detalles o un caso más avanzado, dime y te explico más. 💪😎
+
+
+
+
+¡Buena pregunta! Pero en **Cisco IOS**, el comando `switchport trunk disallowed vlan` **NO existe**. 🔴  
+
+Cisco **solo permite definir qué VLANs pueden pasar** por un trunk con el comando:  
+```bash
+switchport trunk allowed vlan <lista_de_vlans>
+```
+No hay un comando **"disallowed"**, así que lo que tendrías que hacer es **permitir solo las VLANs que necesitas** en el trunk.  
+
+---
+
+### **¿Cómo lograrlo correctamente?** ✅  
+
+Si quieres que solo ciertas VLANs pasen por el trunk y **bloquear todas las demás**, usa:  
+```bash
+interface fa0/1
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+```
+🔹 **¿Qué hace esto?**  
+- Permite que **solo** la VLAN 10 y la VLAN 20 pasen por el trunk.  
+- **Todas las demás VLANs (incluyendo VLAN 1) quedan bloqueadas** automáticamente.  
+
+---
+
+### **Verificación del Trunk** 🔍  
+Después de configurarlo, revisa con:  
+```bash
+show interfaces trunk
+```
+🔹 Verás una salida como esta:  
+```
+Port    Mode     Encapsulation  Status    Allowed VLANs
+Fa0/1   on       802.1q         trunking  10,20
+```
+Aquí se confirma que **solo VLAN 10 y 20 están permitidas** en el trunk.  
+
+---
+
+### **¿Qué pasa si no configuro nada en el trunk?**  
+Por defecto, **todas las VLANs pasan por el trunk**, lo que puede generar tráfico innecesario.  
+
+Si no usas `switchport trunk allowed vlan`, entonces verás algo así con `show interfaces trunk`:  
+```
+Port    Mode     Encapsulation  Status    Allowed VLANs
+Fa0/1   on       802.1q         trunking  1-4094
+```
+Eso significa que **todas las VLANs posibles** están pasando, lo cual no es ideal.  
+
+---
+
+### **🔥 Resumen Final** 🔥  
+| Método | Funciona en Cisco? | ¿Qué hace? |
+|--------|-------------------|------------|
+| `switchport trunk allowed vlan X,Y` | ✅ Sí | Permite solo VLANs X y Y en el trunk. |
+| `switchport trunk disallowed vlan X,Y` | ❌ No | **No existe en Cisco IOS**. |
+| Sin configuración extra | 🚫 No recomendado | Todas las VLANs pasan por el trunk. |
+
+💡 **Conclusión**: **Usa `switchport trunk allowed vlan` para controlar qué VLANs pasan por el enlace troncal.**  
+
+---
+
+Si tienes más dudas o quieres más ejemplos prácticos, dime y seguimos dándole 💪🔥
+
+
+ChatGPT said:
+
+¡Exacto! 🔥 Toda VLAN que no esté en la lista del comando switchport trunk allowed vlan será bloqueada automáticamente en ese trunk.

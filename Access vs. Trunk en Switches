@@ -1,0 +1,103 @@
+¡Claro, bro! Vamos a desglosarlo bien para que lo entiendas a fondo. 🔥  
+
+---
+
+## 🔷 **Access vs. Trunk en Switches** 🔷  
+
+En los switches **Cisco**, los puertos pueden operar en dos modos principales:  
+
+1. **Modo Access** 🟢  
+   - Se usa para conectar dispositivos finales como **PCs, impresoras o servidores**.  
+   - Solo **pertenece a una VLAN**.  
+   - **No entiende etiquetas VLAN (802.1Q)** → Solo pasa tráfico sin etiquetar.  
+
+2. **Modo Trunk** 🔵  
+   - Se usa para conectar **switches entre sí**.  
+   - Transporta tráfico de **múltiples VLANs** sobre un solo enlace.  
+   - Usa **etiquetado VLAN (802.1Q)** para distinguir a qué VLAN pertenece cada paquete.  
+   - Permite que varias VLANs se comuniquen a través del mismo cable.  
+
+---
+
+## 🔷 **Ejemplo Práctico** 🔷  
+Imagina que tienes **dos switches**, y en cada uno hay computadoras en diferentes VLANs:  
+
+🔹 **S1**  
+- **Fa0/2** → PC en **VLAN 10**  
+- **Fa0/3** → PC en **VLAN 20**  
+- **Fa0/1** → Enlace troncal hacia S2  
+
+🔹 **S2**  
+- **Fa0/2** → PC en **VLAN 10**  
+- **Fa0/3** → PC en **VLAN 20**  
+- **Fa0/1** → Enlace troncal hacia S1  
+
+Si no usamos **trunk**, solo se comunicarían los dispositivos conectados al mismo switch. Para que las VLANs se comuniquen entre switches, **se configura un puerto trunk**.
+
+---
+
+## 🔷 **¿Cómo funciona el Trunk?** 🔷  
+Cuando un switch envía tráfico a otro switch a través de un puerto **trunk**, necesita identificar a qué VLAN pertenece cada paquete.  
+
+🔹 **Esto se logra con el protocolo 802.1Q**:  
+- Cada **frame Ethernet** lleva una **etiqueta VLAN** que dice "este paquete pertenece a la VLAN 10" o "este pertenece a la VLAN 20".  
+- El switch receptor **lee la etiqueta** y lo entrega al puerto correcto.  
+
+---
+
+## 🔷 **Configuraciones en Cisco** 🔷  
+
+### ✅ **Configurar un puerto en modo Access**  
+Este comando es para cuando conectas una **PC, servidor o impresora** al switch:  
+```bash
+interface fa0/2
+switchport mode access
+switchport access vlan 10
+exit
+```
+🔹 **Explicación**:  
+- `switchport mode access` → Configura el puerto como acceso.  
+- `switchport access vlan 10` → Asigna la VLAN 10 al puerto.  
+
+---
+
+### ✅ **Configurar un puerto en modo Trunk**  
+Este comando es para cuando conectas **switch con switch**:  
+```bash
+interface fa0/1
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+```
+🔹 **Explicación**:  
+- `switchport mode trunk` → Configura el puerto como trunk.  
+- `switchport trunk allowed vlan 10,20` → Permite que pasen solo VLAN 10 y 20.  
+
+---
+
+## 🔷 **Comandos de Verificación** 🔷  
+
+📌 **Verificar qué VLANs existen y qué puertos están en cada una**  
+```bash
+show vlan brief
+```
+📌 **Verificar si un puerto es access o trunk**  
+```bash
+show interfaces fa0/1 switchport
+```
+📌 **Verificar los trunks activos y las VLANs permitidas**  
+```bash
+show interfaces trunk
+```
+
+---
+
+## 🔥 **Resumen Rápido** 🔥  
+| **Modo**  | **Uso** | **Tráfico Etiquetado** | **Para qué se usa** |
+|-----------|--------|------------------|----------------|
+| Access  | 1 VLAN  | ❌ No | PCs, servidores, impresoras |
+| Trunk   | Múltiples VLANs | ✅ Sí (802.1Q) | Conectar switches |
+
+---
+
+Con esto ya tienes un conocimiento sólido de **access vs. trunk**. Si quieres más detalles o un caso más avanzado, dime y te explico más. 💪😎

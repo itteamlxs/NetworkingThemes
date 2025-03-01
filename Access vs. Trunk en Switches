@@ -173,3 +173,121 @@ Si tienes más dudas o quieres más ejemplos prácticos, dime y seguimos dándol
 ChatGPT said:
 
 ¡Exacto! 🔥 Toda VLAN que no esté en la lista del comando switchport trunk allowed vlan será bloqueada automáticamente en ese trunk.
+
+
+Funcionan chat ahora sabes que conecte 2 maquinas mas, estas estaran en el segmento de red 192.168.5.0 entonces pc3 192.168.5.10 y la pc4 a la 192.168.5.11. y estas estaran en la vlan2 pero deben aceptar comunicacion de la vlan. como configuro?
+
+¡Buena movida! 🔥 Ahora tienes **dos segmentos de red**:  
+
+- **VLAN 1 → (192.168.1.0/24)** con **PC1 (192.168.1.10) y PC2 (192.168.1.11)**.  
+- **VLAN 2 → (192.168.5.0/24)** con **PC3 (192.168.5.10) y PC4 (192.168.5.11)**.  
+
+📌 **Objetivo:**  
+✅ Configurar **VLAN 2** en los switches.  
+✅ Asegurar que VLAN 1 y VLAN 2 se comuniquen.  
+
+---
+
+## **1️⃣ Crear VLAN 2 en ambos switches**
+Debemos crear VLAN 2 en **S1** y **S2**, y asignar los puertos donde están conectadas PC3 y PC4.
+
+### **Configuración en S1**
+```bash
+enable
+configure terminal
+
+# Crear VLAN 2
+vlan 2
+name VLAN_PC3_PC4
+exit
+
+# Asignar VLAN 2 a Fa0/3 (PC3)
+interface fa0/3
+switchport mode access
+switchport access vlan 2
+exit
+```
+
+---
+
+### **Configuración en S2**
+```bash
+enable
+configure terminal
+
+# Crear VLAN 2
+vlan 2
+name VLAN_PC3_PC4
+exit
+
+# Asignar VLAN 2 a Fa0/3 (PC4)
+interface fa0/3
+switchport mode access
+switchport access vlan 2
+exit
+```
+
+---
+
+## **2️⃣ Permitir VLAN 2 en el enlace troncal**
+Actualmente, el trunk **Fa0/1 entre S1 y S2** solo permite VLAN 1.  
+💡 **Debemos agregar VLAN 2 para que pueda pasar por el enlace.**  
+
+En **S1 y S2**, ejecuta:  
+```bash
+interface fa0/1
+switchport trunk allowed vlan 1,2
+exit
+```
+🔹 Ahora **el trunk permitirá tráfico de VLAN 1 y VLAN 2**.  
+
+---
+
+## **3️⃣ Configurar IP en VLAN 2 para administración de los switches**
+Esto permitirá administrar los switches desde VLAN 2.  
+
+🔹 **En S1:**
+```bash
+interface vlan 2
+ip address 192.168.5.100 255.255.255.0
+no shutdown
+exit
+```
+
+🔹 **En S2:**
+```bash
+interface vlan 2
+ip address 192.168.5.101 255.255.255.0
+no shutdown
+exit
+```
+
+---
+
+## **4️⃣ Verificación de VLANs y conectividad**
+📌 **Comprobar VLANs en los switches**
+```bash
+show vlan brief
+```
+📌 **Comprobar el trunk**
+```bash
+show interfaces trunk
+```
+📌 **Hacer ping entre PC3 y PC4**
+```bash
+ping 192.168.5.11
+```
+📌 **Hacer ping entre PC1 y PC2**
+```bash
+ping 192.168.1.11
+```
+
+---
+
+## **5️⃣ Configurar enrutamiento entre VLANs (Inter-VLAN Routing)**  
+Las VLANs **no pueden comunicarse entre sí** sin un **router o un switch de capa 3**.  
+
+Si tienes **un router**, conecta un puerto al switch y haz **Router-on-a-Stick**.  
+Si es un **switch de capa 3**, crea interfaces VLAN.
+
+¿Usas un switch L3 o quieres hacer enrutamiento con un router? Dime para configurarlo. 🔥💪

@@ -1,0 +1,81 @@
+# Guía para configurar redes NAT personalizadas en VirtualBox y VMware
+
+## Introducción
+Este archivo proporciona instrucciones para configurar un adaptador de red que permita que las máquinas virtuales (VMs) se comuniquen entre sí, tengan acceso a internet, pero no puedan acceder a la máquina host. Las instrucciones cubren dos plataformas de virtualización populares: **VirtualBox** y **VMware**.
+
+## Requisitos previos
+- **VirtualBox** o **VMware Workstation** instalado.
+- Acceso de administrador en tu máquina host para crear redes virtuales.
+
+---
+
+## Instrucciones para VirtualBox
+
+### 1. Crear una NAT Network (Red NAT personalizada)
+Para permitir que las VMs se vean entre sí y tengan acceso a internet sin que accedan al host, utilizaremos una **Red NAT personalizada**.
+
+#### Pasos:
+1. Abre **VirtualBox**.
+2. Ve a **Archivo > Preferencias > Red > Redes NAT**.
+3. Haz clic en **+** (Agregar) para crear una nueva red NAT.
+   - Ejemplo: `NatRed1`
+4. Asegúrate de activar la opción **"Soporte DHCP"** para que las VMs obtengan una IP automáticamente.
+   - Deja desmarcada la opción **"Acceso al host"** para evitar que el host sea visible para las VMs.
+
+### 2. Configurar las VMs para usar la NAT Network
+1. Selecciona la VM que quieres configurar en VirtualBox.
+2. Haz clic en **Configuración > Red**.
+3. En **Adaptador 1**, configura lo siguiente:
+   - **Conectado a:** `Red NAT`.
+   - **Nombre:** Selecciona la red NAT que creaste (`NatRed1`).
+4. Repite este paso para cada VM que necesite acceso a internet y comunicación entre ellas.
+
+### 3. Verifica la configuración
+1. Inicia las VMs.
+2. Comprueba que las VMs pueden hacer ping entre ellas.
+3. Asegúrate de que las VMs tienen acceso a internet.
+4. Verifica que el host no sea accesible desde las VMs.
+
+---
+
+## Instrucciones para VMware
+
+### 1. Crear una Red NAT personalizada en VMware
+
+#### Pasos:
+1. Abre **VMware Workstation**.
+2. Ve a **Edit > Virtual Network Editor**.
+3. Si no tienes una red NAT personalizada, crea una nueva. Haz clic en **Change Settings** y luego en **Add Network**.
+4. Selecciona **NAT** como tipo de red.
+5. Asegúrate de que la red esté configurada de manera similar a la de VirtualBox:
+   - **Direccionamiento IP:** Asegúrate de que el rango de IP esté en una subred privada (por ejemplo, 192.168.x.x).
+   - **Configuración DHCP:** Habilita el servicio DHCP para que las VMs obtengan IP automáticamente.
+6. Haz clic en **OK** para guardar la configuración.
+
+### 2. Configurar las VMs para usar la NAT Network
+1. Selecciona la VM y haz clic en **Settings**.
+2. En **Network Adapter**, selecciona:
+   - **Conectado a:** `NAT`.
+3. Repite el paso para cada VM que necesite conectarse a la misma red.
+
+### 3. Verifica la configuración
+1. Inicia las VMs.
+2. Verifica que las VMs puedan hacer ping entre ellas.
+3. Comprueba que las VMs tienen acceso a internet.
+4. Asegúrate de que el host no sea accesible desde las VMs.
+
+---
+
+## Notas adicionales
+- **VirtualBox** y **VMware** asignan direcciones IP automáticamente a las VMs cuando el servicio DHCP está activado. Si prefieres asignar direcciones estáticas, puedes hacerlo manualmente en la configuración de red de cada VM.
+- En ambos casos, las máquinas host no serán accesibles desde las VMs, ya que estas se encuentran en una red NAT aislada.
+
+---
+
+## Conclusión
+Ahora tienes un entorno de red aislado para tus máquinas virtuales que les permite comunicarse entre sí y acceder a internet, pero mantiene la seguridad al evitar que las VMs accedan a la máquina host.
+
+Si tienes más preguntas, no dudes en consultar la documentación oficial de [VirtualBox](https://www.virtualbox.org/wiki/Documentation) o [VMware](https://www.vmware.com/support.html).
+
+
+

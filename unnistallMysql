@@ -1,0 +1,154 @@
+Claro, aquí tienes un archivo `README.md` con todos los pasos detallados que hiciste para:
+
+1. Remover completamente MySQL del sistema sin afectar XAMPP.
+2. Verificar la integridad de la instalación de XAMPP.
+3. Reinstalar MySQL de forma limpia en Fedora 41.
+
+---
+
+### ✅ `README.md`
+
+````markdown
+# Instalación limpia de MySQL en Fedora 41 sin afectar XAMPP
+
+Este documento detalla cómo se eliminó una instalación de MySQL del sistema en Fedora 41 sin dañar la instancia de MySQL incluida en XAMPP, y cómo se reinstaló de manera limpia desde los repositorios oficiales.
+
+---
+
+## 🧹 1. Eliminación completa de MySQL del sistema
+
+### 📦 Ver los paquetes instalados
+```bash
+rpm -qa | grep -i mysql
+````
+
+Salida esperada (ejemplo):
+
+```
+mysql84-community-release-fc41-1.noarch
+mysql-community-common-8.4.5-10.fc41.x86_64
+mysql-community-client-plugins-8.4.5-10.fc41.x86_64
+mysql-community-libs-8.4.5-10.fc41.x86_64
+mysql-community-client-8.4.5-10.fc41.x86_64
+mysql-community-icu-data-files-8.4.5-10.fc41.x86_64
+mysql-community-server-8.4.5-10.fc41.x86_64
+```
+
+### 🗑️ Eliminar los paquetes
+
+```bash
+sudo dnf remove mysql\*
+```
+
+### (Opcional) Limpiar archivos residuales
+
+```bash
+sudo rm -rf /var/lib/mysql
+sudo rm -rf /etc/my.cnf /etc/my.cnf.d/
+```
+
+---
+
+## 🧪 2. Verificar que XAMPP está intacto
+
+### Ver el estado de los servicios de XAMPP:
+
+```bash
+sudo /opt/lampp/lampp status
+```
+
+Salida esperada:
+
+```
+MySQL is running.
+```
+
+### Acceder al cliente MySQL de XAMPP:
+
+```bash
+sudo /opt/lampp/bin/mysql -u root
+```
+
+---
+
+## 🔄 3. Instalación limpia de MySQL 8 desde repositorio oficial
+
+### 📥 Instalar el repositorio de Oracle MySQL
+
+```bash
+sudo dnf install https://dev.mysql.com/get/mysql80-community-release-fc41-1.noarch.rpm
+```
+
+### ✅ Verificar que el repositorio esté activo
+
+```bash
+sudo dnf repolist enabled | grep mysql
+```
+
+### 🛠️ Instalar MySQL Server
+
+```bash
+sudo dnf install mysql-community-server
+```
+
+---
+
+## ▶️ 4. Iniciar y habilitar MySQL como servicio
+
+```bash
+sudo systemctl enable mysqld
+sudo systemctl start mysqld
+sudo systemctl status mysqld
+```
+
+---
+
+## 🔑 5. Obtener la contraseña temporal de root
+
+```bash
+sudo grep 'temporary password' /var/log/mysqld.log
+```
+
+Copiar la contraseña que aparece, por ejemplo:
+
+```
+A temporary password is generated for root@localhost: Abcd1234!
+```
+
+---
+
+## 🔒 6. Cambiar la contraseña de root
+
+```bash
+mysql -u root -p
+```
+
+Luego dentro del cliente MySQL:
+
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'NuevaContraseñaSegura123!';
+```
+
+---
+
+## ⚠️ Notas sobre conflicto de puertos
+
+Si estás usando XAMPP y MySQL del sistema al mismo tiempo, ambos intentarán usar el puerto `3306`. Opciones:
+
+* Apagar uno mientras se usa el otro.
+* Cambiar el puerto en el archivo `/etc/my.cnf` o `/opt/lampp/etc/my.cnf`.
+
+---
+
+## ✅ Resultado Final
+
+* XAMPP se mantuvo intacto.
+* MySQL 8.4 fue instalado correctamente desde el repositorio oficial.
+* Se evitó conflicto de servicios y se limpió correctamente la configuración vieja.
+
+```
+
+---
+
+¿Te gustaría que lo guarde como archivo descargable (`README.md`) o te lo dejo para que lo copies/pegues?
+```
